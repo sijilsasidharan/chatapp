@@ -1,0 +1,82 @@
+<div class="fluid-container">
+  <div class="row">
+      <div class="col-md-5">
+          <div class="panel panel-primary">
+              <div class="panel-heading">
+                  <span class="glyphicon glyphicon-comment"></span> Chat Room ( {{ nickName }} )
+              </div>
+              <div class="panel-body" *ngIf="!nickName">
+                  <input id="btn-input" type="text" name="nickname" class="form-control input-sm" placeholder="Type your nick name here..." required="" #name/>
+                  <button class="btn btn-warning btn-sm" id="btn-chat" (click)="nickName = name.value"> Enter chat</button>
+                </div>
+              <div #scrollMe class="panel-body" *ngIf="nickName">
+                  <ul class="chat">
+                    <li *ngFor="let message of messageList">
+                      <div class="left clearfix" *ngIf="message.nick_name === nickName; else rightchat">
+                        <span class="chat-img pull-left">
+                          <img src="http://placehold.it/50/55C1E7/fff&text=ME" alt="User Avatar" class="img-circle" />
+                        </span>
+                        <div class="chat-body clearfix">
+                            <div class="header">
+                                <strong class="primary-font">{{ message.nick_name }}</strong> <small class="pull-right text-muted">
+                                    <span class="glyphicon glyphicon-time"></span>{{ message.updated_at | date: 'medium' }}</small>
+                            </div>
+                            <p>{{ message.text }}</p>
+                            <app-canvas-tool *ngIf="message.shapes && message.shapes.length"
+                            [cw]="425" 
+                            [ch]="150"
+                            [shapeList]="message.shapes">
+                            </app-canvas-tool>
+                        </div>
+                      </div>
+                      <ng-template #rightchat>
+                          <div class="right clearfix">
+                            <span class="chat-img pull-right">
+                              <img src="http://placehold.it/50/FA6F57/fff&text={{ getFirstLetter(message.nick_name) }}" alt="User Avatar" class="img-circle" />
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>{{ message.updated_at | date: 'medium' }}</small>
+                                    <strong class="pull-right primary-font">{{ message.nick_name }}</strong>
+                                </div>
+                                <p>{{ message.text }}</p>
+                                <app-canvas-tool *ngIf="message.shapes && message.shapes.length"
+                                [cw]="425" 
+                                [ch]="150"
+                                [shapeList]="message.shapes">
+                                </app-canvas-tool>
+                            </div>
+                          </div>
+                        </ng-template>
+                    </li>
+                  </ul>
+              </div>
+              <div class="panel-footer" *ngIf="nickName">
+                  <div class="input-group">
+                      <input type="radio" name="messageType" class="radio-inline" [(ngModel)]="messageType" value="text"/>Text
+                      <input type="radio" name="messageType" class="radio-inline" [(ngModel)]="messageType" value="draw"/>Draw
+                    </div>
+                    <app-canvas-tool 
+                    *ngIf="messageType === 'draw'"
+                    [cw]="425" 
+                    [ch]="150"
+                    (getShapes)="getShapes($event)">
+                  </app-canvas-tool>
+                  <form>
+                    <div class="input-group">
+                        <input *ngIf="messageType === 'text'" id="btn-input" type="text" [(ngModel)]="message" name="message" class="form-control input-sm" placeholder="Type your message here..." required="" />
+                        
+                        <span class="input-group-btn">
+                            <button (click)="sendMessage()" class="btn btn-warning btn-sm" id="btn-chat">
+                                Send</button>
+                        </span>
+                    </div>
+                  </form>
+                </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <br /> <br />
+<!-- 
+  <app-canvas-tool (getShapes)="getShapes($event)"></app-canvas-tool> -->

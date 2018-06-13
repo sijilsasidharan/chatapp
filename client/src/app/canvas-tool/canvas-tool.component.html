@@ -1,0 +1,26 @@
+<h3 *ngIf="!renderOnly"><span class="badge badge-secondary"> {{ !shape ? 'Please select a shape' : shape}}</span></h3>
+<div id="container" #canvas [style.border]="!renderOnly ? '1px solid black' : ''">
+
+</div>
+<form *ngIf="!renderOnly" class="form-inline">
+  <div class="row">
+    <div class="col-md-6">
+      <button (click)="shape = 'rectangle'" class="btn btn-default">
+        <div class="square"></div>
+      </button>
+      <button  (click)="shape = 'circle'"  class="btn btn-default">
+        <div class="circle"></div>
+      </button>
+      <button  (click)="shape = 'line'"  class="btn btn-default">
+          <div class="line"></div>
+        </button>
+    </div>
+    <div class="col-md-6">
+      Line width : <input type="number" [(ngModel)]="lineWidth" [ngModelOptions]="{standalone: true}" class="form-control" style="width:100px;"/>
+      <br />
+      Stroke Color : <select type="number" [(ngModel)]="strockStyle" [ngModelOptions]="{standalone: true}" class="form-control">
+        <option *ngFor="let c of color"[value]="c"> {{ c }} </option>
+      </select>
+    </div>
+  </div>
+</form>
